@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Linux," />
 
 
 
@@ -82,15 +82,16 @@
 
 
 
-<meta name="description" content="大鹏一日同风起，扶摇直上九万里">
-<meta property="og:type" content="website">
-<meta property="og:title" content="SeaEagle's Blog">
-<meta property="og:url" content="http://blog.eaglefire.cn/categories/WebService/index.html">
+<meta name="description" content="作者：海鹰此教程讲述如何在CentOS禁止root用户远程登录，并修改远程端口版权所有，未经允许，请勿随意转载。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux远程登录">
+<meta property="og:url" content="http://blog.eaglefire.cn/blog/2016/04/29/Linux-2016-04-29-Linux远程登录.html">
 <meta property="og:site_name" content="SeaEagle's Blog">
-<meta property="og:description" content="大鹏一日同风起，扶摇直上九万里">
+<meta property="og:description" content="作者：海鹰此教程讲述如何在CentOS禁止root用户远程登录，并修改远程端口版权所有，未经允许，请勿随意转载。">
+<meta property="og:updated_time" content="2016-04-29T02:40:11.216Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SeaEagle's Blog">
-<meta name="twitter:description" content="大鹏一日同风起，扶摇直上九万里">
+<meta name="twitter:title" content="Linux远程登录">
+<meta name="twitter:description" content="作者：海鹰此教程讲述如何在CentOS禁止root用户远程登录，并修改远程端口版权所有，未经允许，请勿随意转载。">
 
 
 
@@ -108,7 +109,7 @@
   };
 </script>
 
-  <title> 分类: WebService | SeaEagle's Blog </title>
+  <title> Linux远程登录 | SeaEagle's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -139,7 +140,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-right  ">
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,47 +238,179 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        WebService
-        <small>分类</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux远程登录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-29T09:45:00+08:00" content="2016-04-29">
+              2016-04-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2016/04/29/Linux-2016-04-29-Linux远程登录.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2016/04/29/Linux-2016-04-29-Linux远程登录.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/blog/2016/04/29/Linux-2016-04-29-Linux远程登录.html" class="leancloud_visitors" data-flag-title="Linux远程登录">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <blockquote>
+<p>作者：海鹰<br>此教程讲述如何在CentOS禁止root用户远程登录，并修改远程端口<br>版权所有，未经允许，请勿随意转载。</p>
+</blockquote>
+<a id="more"></a>
+<blockquote>
+<p>为何要禁止root用户以及更改远程端口</p>
+</blockquote>
+<ol>
+<li><p>默认的远程登录端口为22，默认允许远程登录的用户为root，在这么个规则下，遭受攻击时，都是对准端口，以root用户进行密码暴力破解。也许你会说，提高密码复杂度，就算要破解，也要等个10年。但是，如果从一开始，我就把端口封掉，那么，被攻击的几率就大大降低了。</p>
+</li>
+<li><p>如果，root用户登录了，但是一个不小心执行了某个不可回退的命令，比如，<code>rm -rf /</code>，这一切，都是不敢想象的，所以，给自己留条后路很重要。</p>
+</li>
+</ol>
+<h4 id="1-笔者环境"><a href="#1-笔者环境" class="headerlink" title="1. 笔者环境"></a>1. 笔者环境</h4><ol>
+<li>操作系统：CentOS 7</li>
+</ol>
+<h4 id="2-开始工作"><a href="#2-开始工作" class="headerlink" title="2. 开始工作"></a>2. 开始工作</h4><h5 id="1-新建允许远程登录的用户"><a href="#1-新建允许远程登录的用户" class="headerlink" title="1. 新建允许远程登录的用户"></a>1. 新建允许远程登录的用户</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># groupadd test</span></span><br><span class="line"><span class="comment"># useradd -gtest test</span></span><br></pre></td></tr></table></figure>
+<h5 id="2-允许用户进行远程登录"><a href="#2-允许用户进行远程登录" class="headerlink" title="2. 允许用户进行远程登录"></a>2. 允许用户进行远程登录</h5><p>执行visudo命令，找到:<br>root ALL=(ALL) ALL<br>在下面增加：（注意，test 是Linux新增的一个普通用户）<br>test ALL=(ALL) ALL</p>
+<h5 id="3-用户远程登录的密码"><a href="#3-用户远程登录的密码" class="headerlink" title="3. 用户远程登录的密码"></a>3. 用户远程登录的密码</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># passwd test</span></span><br><span class="line">Changing password <span class="keyword">for</span> user test.</span><br><span class="line">New password: </span><br><span class="line">Retype new password: </span><br><span class="line">passwd: all authentication tokens updated successfully.</span><br></pre></td></tr></table></figure>
+<h5 id="4-修改远程登录端口"><a href="#4-修改远程登录端口" class="headerlink" title="4. 修改远程登录端口"></a>4. 修改远程登录端口</h5><p>编辑/etc/ssh/sshd_config，将<br>Port 22<br>改为<br>Port 你想要的端口</p>
+<h5 id="5-禁止root用户远程登录"><a href="#5-禁止root用户远程登录" class="headerlink" title="5. 禁止root用户远程登录"></a>5. 禁止root用户远程登录</h5><p>编辑/etc/ssh/sshd_config，将<br>PermitRootLogin yes<br>改为<br>PermitRootLogin no</p>
+<h5 id="6-重启sshd"><a href="#6-重启sshd" class="headerlink" title="6. 重启sshd"></a>6. 重启sshd</h5><p>service sshd reload</p>
+<h4 id="3-结语"><a href="#3-结语" class="headerlink" title="3. 结语"></a>3. 结语</h4><blockquote>
+<p>本教程到此结束，欢迎指正，互相交流。<br>版权所有，未经允许，请勿随意转载。</p>
+</blockquote>
 
-      <h1 class="post-title">
+      
+    </div>
+    
+    <div>
+      
         
-            <a class="post-title-link" href="/blog/2016/04/28/WebService-2016-04-28-CXF客户端入门使用.html" itemprop="url">
-              
-                <span itemprop="name">CXF客户端入门使用</span>
-              
-            </a>
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-28T10:00:00+08:00"
-              content="2016-04-28" >
-          04-28
-        </time>
-      </div>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag">#Linux</a>
+          
+        </div>
+      
 
-    </header>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2016/04/28/WebService-2016-04-28-CXF客户端入门使用.html" rel="next" title="CXF客户端入门使用">
+                <i class="fa fa-chevron-left"></i> CXF客户端入门使用
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </section>
 
-  
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -285,6 +418,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2016/04/29/Linux-2016-04-29-Linux远程登录.html"
+           data-title="Linux远程登录" data-url="http://blog.eaglefire.cn/blog/2016/04/29/Linux-2016-04-29-Linux远程登录.html">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -304,8 +445,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -396,6 +546,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-笔者环境"><span class="nav-number">1.</span> <span class="nav-text">1. 笔者环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-开始工作"><span class="nav-number">2.</span> <span class="nav-text">2. 开始工作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-新建允许远程登录的用户"><span class="nav-number">2.1.</span> <span class="nav-text">1. 新建允许远程登录的用户</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-允许用户进行远程登录"><span class="nav-number">2.2.</span> <span class="nav-text">2. 允许用户进行远程登录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-用户远程登录的密码"><span class="nav-number">2.3.</span> <span class="nav-text">3. 用户远程登录的密码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-修改远程登录端口"><span class="nav-number">2.4.</span> <span class="nav-text">4. 修改远程登录端口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-禁止root用户远程登录"><span class="nav-number">2.5.</span> <span class="nav-text">5. 禁止root用户远程登录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-重启sshd"><span class="nav-number">2.6.</span> <span class="nav-text">6. 重启sshd</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-结语"><span class="nav-number">3.</span> <span class="nav-text">3. 结语</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -503,6 +664,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
