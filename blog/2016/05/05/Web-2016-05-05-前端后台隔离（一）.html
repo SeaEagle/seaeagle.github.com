@@ -88,7 +88,7 @@
 <meta property="og:url" content="http://blog.eaglefire.cn/blog/2016/05/05/Web-2016-05-05-前端后台隔离（一）.html">
 <meta property="og:site_name" content="SeaEagle's Blog">
 <meta property="og:description" content="作者：海鹰此教程讲述如何对前端后台进行隔离，以及隔离之后的操作版权所有，未经允许，请勿随意转载。">
-<meta property="og:updated_time" content="2016-05-05T04:27:46.730Z">
+<meta property="og:updated_time" content="2016-05-13T09:40:56.459Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端后台隔离（一）">
 <meta name="twitter:description" content="作者：海鹰此教程讲述如何对前端后台进行隔离，以及隔离之后的操作版权所有，未经允许，请勿随意转载。">
@@ -382,7 +382,7 @@
 </ol>
 <h4 id="2-隔离的好处"><a href="#2-隔离的好处" class="headerlink" title="2. 隔离的好处"></a>2. 隔离的好处</h4><p>很多时候，常规的做法会有这样的问题：在并发量稍微大一点点，action的处理速度一般是可以接受，但是页面的渲染却花了很多时间。想想，如果一千个客户端发起请求，那么，一个后台就要渲染一千次页面。但是，如果，后台仅仅返回简单的文本数据，由前端页面自己解析、渲染及显示，那么，后台渲染的压力就释放了，从而利用客户端来分摊这样的压力。</p>
 <p>后期，还可以对前端页面及脚本进行缓存、加速，这样，前端页面的加载速度将达到一个全新的级别。</p>
-<h4 id="2-导致的新问题"><a href="#2-导致的新问题" class="headerlink" title="2. 导致的新问题"></a>2. 导致的新问题</h4><ol>
+<h4 id="3-导致的新问题"><a href="#3-导致的新问题" class="headerlink" title="3. 导致的新问题"></a>3. 导致的新问题</h4><ol>
 <li><p>安全问题<br>前端将会直接对后台接口进行访问，请求的数据或返回的数据，是可以直接从脚本中进行查看。不过，可以采用HTTPS的请求方式，从而防止请求拦截并探查到请求数据。</p>
 </li>
 <li><p>跨域问题<br>很明显，前端页面将独立为一个工程，而后台也是一个工程，两个工程是不同名的，这样的话，前端访问后台是会产生跨域安全问题要处理。</p>
@@ -586,7 +586,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-如何进行隔离"><span class="nav-number">1.</span> <span class="nav-text">1. 如何进行隔离</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#对于后台"><span class="nav-number">1.1.</span> <span class="nav-text">对于后台</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对于前端"><span class="nav-number">1.2.</span> <span class="nav-text">对于前端</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-隔离的好处"><span class="nav-number">2.</span> <span class="nav-text">2. 隔离的好处</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-导致的新问题"><span class="nav-number">3.</span> <span class="nav-text">2. 导致的新问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-如何进行隔离"><span class="nav-number">1.</span> <span class="nav-text">1. 如何进行隔离</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#对于后台"><span class="nav-number">1.1.</span> <span class="nav-text">对于后台</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对于前端"><span class="nav-number">1.2.</span> <span class="nav-text">对于前端</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-隔离的好处"><span class="nav-number">2.</span> <span class="nav-text">2. 隔离的好处</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-导致的新问题"><span class="nav-number">3.</span> <span class="nav-text">3. 导致的新问题</span></a></li></ol></div>
             
           </div>
         </section>
