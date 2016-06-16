@@ -88,7 +88,7 @@
 <meta property="og:url" content="http://blog.eaglefire.cn/blog/2016/04/22/Dubbo-2016-04-22-Dubbo入门.html">
 <meta property="og:site_name" content="SeaEagle's Blog">
 <meta property="og:description" content="作者：海鹰此教程参考阿里巴巴Dubbo官方网站（http://dubbo.io）的例子进行编写代码在提交Github时已通过测试，运行无误版权所有，未经允许，请勿随意转载。">
-<meta property="og:updated_time" content="2016-04-28T02:24:38.747Z">
+<meta property="og:updated_time" content="2016-06-16T09:41:46.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo入门">
 <meta name="twitter:description" content="作者：海鹰此教程参考阿里巴巴Dubbo官方网站（http://dubbo.io）的例子进行编写代码在提交Github时已通过测试，运行无误版权所有，未经允许，请勿随意转载。">
@@ -433,65 +433,24 @@ Stopping zookeeper ... STOPPED
 <p>新建一个服务接口<code>DemoService.java</code>:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DemoService</span> </span>&#123;</span><br><span class="line">   	<span class="comment">/**</span><br><span class="line">    	* 测试方法</span><br><span class="line">    	* <span class="doctag">@param</span> name</span><br><span class="line">    	* <span class="doctag">@return</span></span><br><span class="line">    	*/</span></span><br><span class="line">   	<span class="function">String <span class="title">sayHello</span><span class="params">(String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>新建一个服务接口实现类<code>DemoServiceImpl</code>:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServiceImpl</span> <span class="keyword">implements</span> <span class="title">DemoService</span> </span>&#123;</span><br><span class="line">   	<span class="comment">/**</span><br><span class="line">    	* 测试方法 - 实现</span><br><span class="line">    	* <span class="doctag">@param</span> name</span><br><span class="line">    	* <span class="doctag">@return</span></span><br><span class="line">    	*/</span></span><br><span class="line">   	<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">       	<span class="keyword">return</span> <span class="string">"Hello "</span> + name;</span><br><span class="line">   	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServiceImpl</span> <span class="keyword">implements</span> <span class="title">DemoService</span> </span>&#123;</span><br><span class="line">   	<span class="comment">/**</span><br><span class="line">    	* 测试方法 - 实现</span><br><span class="line">    	* <span class="doctag">@param</span> name</span><br><span class="line">    	* <span class="doctag">@return</span></span><br><span class="line">    	*/</span></span><br><span class="line">   	<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Hello "</span> + name;</span><br><span class="line">   	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>通过Spring进行注入，并将其服务注册到ZooKeeper:</p>
-<pre><code>&lt;!-- 和本地bean一样实现服务 --&gt;
-&lt;bean id=&quot;demoService&quot; class=&quot;cn.eaglefire.app.service.impl.DemoServiceImpl&quot; /&gt;
-
-&lt;!-- 提供方应用信息，用于计算依赖关系 --&gt;
-&lt;dubbo:application name=&quot;hello-world-app-provider&quot;  /&gt;
-
-&lt;!-- 使用zookeeper广播注册中心暴露服务地址 --&gt;
-&lt;dubbo:registry address=&quot;zookeeper://127.0.0.1:2181&quot; /&gt;
-
-&lt;!-- 用dubbo协议在20880端口暴露服务 --&gt;
-&lt;dubbo:protocol name=&quot;dubbo&quot; port=&quot;20880&quot; /&gt;
-
-&lt;!-- 声明需要暴露的服务接口 --&gt;
-&lt;dubbo:service interface=&quot;cn.eaglefire.app.service.DemoService&quot; ref=&quot;demoService&quot; /&gt;
-</code></pre><p><strong>Consumer项目</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 和本地bean一样实现服务 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"demoService"</span> <span class="attr">class</span>=<span class="string">"cn.eaglefire.app.service.impl.DemoServiceImpl"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 提供方应用信息，用于计算依赖关系 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:application</span> <span class="attr">name</span>=<span class="string">"hello-world-app-provider"</span>  /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 使用zookeeper广播注册中心暴露服务地址 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">"zookeeper://127.0.0.1:2181"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 用dubbo协议在20880端口暴露服务 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:protocol</span> <span class="attr">name</span>=<span class="string">"dubbo"</span> <span class="attr">port</span>=<span class="string">"20880"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 声明需要暴露的服务接口 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">interface</span>=<span class="string">"cn.eaglefire.app.service.DemoService"</span> <span class="attr">ref</span>=<span class="string">"demoService"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>Consumer项目</strong></p>
 <p>使用Maven构建一个简单的J2SE项目</p>
 <p>新建一个服务接口<code>DemoService.java</code>:</p>
-<pre><code>public interface DemoService {
-    /**
-     * 测试方法
-     * @param name
-     * @return
-     */
-    String sayHello(String name);
-}
-</code></pre><p>通过Spring把注册到ZooKeeper的服务注入进来:</p>
-<pre><code>&lt;!-- 使用zookeeper注册中心暴露服务地址 --&gt;
-&lt;dubbo:registry address=&quot;zookeeper://127.0.0.1:2181&quot; /&gt;
-
-&lt;!-- 生成远程服务代理，可以像使用本地bean一样使用demoService --&gt;
-&lt;dubbo:reference id=&quot;demoService&quot; interface=&quot;cn.eaglefire.app.service.DemoService&quot; /&gt;
-</code></pre><p><strong>项目之间的连接点</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DemoService</span> </span>&#123;</span><br><span class="line">   	<span class="comment">/**</span><br><span class="line">    	* 测试方法</span><br><span class="line">    	* <span class="doctag">@param</span> name</span><br><span class="line">    	* <span class="doctag">@return</span></span><br><span class="line">    	*/</span></span><br><span class="line">   	<span class="function">String <span class="title">sayHello</span><span class="params">(String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过Spring把注册到ZooKeeper的服务注入进来:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 使用zookeeper注册中心暴露服务地址 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">"zookeeper://127.0.0.1:2181"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 生成远程服务代理，可以像使用本地bean一样使用demoService --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">id</span>=<span class="string">"demoService"</span> <span class="attr">interface</span>=<span class="string">"cn.eaglefire.app.service.DemoService"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>项目之间的连接点</strong></p>
 <p>可以很明显的看到，在两个项目中都必须有服务接口<code>DemoService.java</code>，在实际开发应用中，这个接口将打包在一个jar包，并提供给Provider和Consumer两个项目使用，Provider对接口进行实现并注册到ZooKeeper，而Consumer在到ZooKeeper中寻找对应的接口实现。</p>
 <h4 id="3-测试"><a href="#3-测试" class="headerlink" title="3. 测试"></a>3. 测试</h4><blockquote>
 <p>不测试一下，怎么知道做得对不对</p>
 </blockquote>
 <p><strong>Provider项目</strong></p>
 <p>编写个主方法并直接运行，运行之后将在ZooKeeper中<code>注册</code>接口实现:</p>
-<pre><code>public class Provider {
-    /**
-     * 主方法
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        //
-        System.out.println(&quot;Begin to load&quot;);
-        // 加载Spring配置文件
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] {&quot;spring/ApplicationContext.xml&quot;});
-        context.start();
-        //
-        System.out.println(&quot;End to load&quot;);
-        // 为保证服务一直开着，利用输入流的阻塞来模拟
-        System.in.read();
-    }
-}
-</code></pre><p>运行结果:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Provider</span> </span>&#123;</span><br><span class="line">   	<span class="comment">/**</span><br><span class="line">    	* 主方法</span><br><span class="line">    	* <span class="doctag">@param</span> args</span><br><span class="line">    	* <span class="doctag">@throws</span> Exception</span><br><span class="line">    	*/</span></span><br><span class="line">   	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">       	<span class="comment">//</span></span><br><span class="line">       	System.out.println(<span class="string">"Begin to load"</span>);</span><br><span class="line">       	<span class="comment">// 加载Spring配置文件</span></span><br><span class="line">       	ClassPathXmlApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="keyword">new</span> String[] &#123;<span class="string">"spring/ApplicationContext.xml"</span>&#125;);</span><br><span class="line">       	context.start();</span><br><span class="line">       	<span class="comment">//</span></span><br><span class="line">       	System.out.println(<span class="string">"End to load"</span>);</span><br><span class="line">       	<span class="comment">// 为保证服务一直开着，利用输入流的阻塞来模拟</span></span><br><span class="line">       	System.in.read();</span><br><span class="line">   	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果:</p>
 <pre><code>Connected to the target VM, address: &apos;127.0.0.1:50305&apos;, transport: &apos;socket&apos;
 Begin to load
 log4j:WARN No appenders could be found for logger (org.springframework.core.env.StandardEnvironment).
@@ -500,31 +459,8 @@ log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more in
 End to load
 </code></pre><p><strong>Consumer项目</strong></p>
 <p>编写个主方法并直接运行，运行之后将在ZooKeeper中<code>寻找</code>接口实现:</p>
-<pre><code>public class Consumer {
-    /**
-     * 主方法
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        //
-        System.out.println(&quot;Begin to load&quot;);
-        // 加载Spring配置文件
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] {&quot;spring/ApplicationContext.xml&quot;});
-        context.start();
-        //
-        System.out.println(&quot;End to load&quot;);
-
-        // 调用远程方法
-        DemoService demoService = (DemoService)context.getBean(&quot;demoService&quot;);
-        String result = demoService.sayHello(&quot;Eagle&quot;);
-        System.out.println(&quot;The result is: &quot;+result);
-
-        // 为保证服务一直开着，利用输入流的阻塞来模拟
-        System.in.read();
-    }
-}
-</code></pre><p>运行结果:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> </span>&#123;</span><br><span class="line">   	<span class="comment">/**</span><br><span class="line">    	* 主方法</span><br><span class="line">    	* <span class="doctag">@param</span> args</span><br><span class="line">    	* <span class="doctag">@throws</span> Exception</span><br><span class="line">    	*/</span></span><br><span class="line">   	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">       	<span class="comment">//</span></span><br><span class="line">       	System.out.println(<span class="string">"Begin to load"</span>);</span><br><span class="line">       	<span class="comment">// 加载Spring配置文件</span></span><br><span class="line">       	ClassPathXmlApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="keyword">new</span> String[] &#123;<span class="string">"spring/ApplicationContext.xml"</span>&#125;);</span><br><span class="line">       	context.start();</span><br><span class="line">       	<span class="comment">//</span></span><br><span class="line">       	System.out.println(<span class="string">"End to load"</span>);</span><br><span class="line"></span><br><span class="line">       	<span class="comment">// 调用远程方法</span></span><br><span class="line">       	DemoService demoService = (DemoService)context.getBean(<span class="string">"demoService"</span>);</span><br><span class="line">       	String result = demoService.sayHello(<span class="string">"Eagle"</span>);</span><br><span class="line">       	System.out.println(<span class="string">"The result is: "</span>+result);</span><br><span class="line"></span><br><span class="line">       	<span class="comment">// 为保证服务一直开着，利用输入流的阻塞来模拟</span></span><br><span class="line">       	System.in.read();</span><br><span class="line">   	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果:</p>
 <pre><code>Connected to the target VM, address: &apos;127.0.0.1:50309&apos;, transport: &apos;socket&apos;
 Begin to load
 log4j:WARN No appenders could be found for logger (org.springframework.core.env.StandardEnvironment).
@@ -646,7 +582,7 @@ The result is: Hello Eagle
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">11</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -654,7 +590,7 @@ The result is: Hello Eagle
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -663,7 +599,7 @@ The result is: Hello Eagle
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
