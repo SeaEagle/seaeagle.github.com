@@ -82,16 +82,16 @@
 
 
 
-<meta name="description" content="作者：海鹰此教程讲述数据库事务版权所有，未经允许，请勿随意转载。">
+<meta name="description" content="作者：海鹰此教程讲述数据库事务并发可能发生的问题，以及四种隔离级别版权所有，未经允许，请勿随意转载。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库事务">
 <meta property="og:url" content="http://blog.eaglefire.cn/blog/2016/07/15/Database-2016-07-15-数据库事务.html">
 <meta property="og:site_name" content="SeaEagle's Blog">
-<meta property="og:description" content="作者：海鹰此教程讲述数据库事务版权所有，未经允许，请勿随意转载。">
-<meta property="og:updated_time" content="2016-07-15T02:20:01.439Z">
+<meta property="og:description" content="作者：海鹰此教程讲述数据库事务并发可能发生的问题，以及四种隔离级别版权所有，未经允许，请勿随意转载。">
+<meta property="og:updated_time" content="2016-07-15T08:33:41.706Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库事务">
-<meta name="twitter:description" content="作者：海鹰此教程讲述数据库事务版权所有，未经允许，请勿随意转载。">
+<meta name="twitter:description" content="作者：海鹰此教程讲述数据库事务并发可能发生的问题，以及四种隔离级别版权所有，未经允许，请勿随意转载。">
 
 
 
@@ -335,9 +335,354 @@
 
       
         <blockquote>
-<p>作者：海鹰<br>此教程讲述数据库事务<br>版权所有，未经允许，请勿随意转载。</p>
+<p>作者：海鹰<br>此教程讲述数据库事务并发可能发生的问题，以及四种隔离级别<br>版权所有，未经允许，请勿随意转载。</p>
 </blockquote>
 <a id="more"></a>
+<h4 id="事务并发可能发生的问题"><a href="#事务并发可能发生的问题" class="headerlink" title="事务并发可能发生的问题"></a>事务并发可能发生的问题</h4><h4 id="丢失更新（-Lost-Update-）"><a href="#丢失更新（-Lost-Update-）" class="headerlink" title="丢失更新（ Lost Update ）"></a>丢失更新（ Lost Update ）</h4><p><strong>表现</strong>：当两个或多个事务选择同一行，然后基于最初选定的值更新该行时，会发生丢失更新问题。每个事务都不知道其它事务的存在，最后的更新将重写其它事务提交的更新，这将导致数据丢失。</p>
+<p><strong>解决方法</strong>：对行加锁，只允许一个更新事务。</p>
+<h5 id="第一类丢失更新"><a href="#第一类丢失更新" class="headerlink" title="第一类丢失更新"></a>第一类丢失更新</h5><p>示例</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">时间</th>
+<th style="text-align:center">取款事务A</th>
+<th style="text-align:center">存款事务B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">T1</td>
+<td style="text-align:center">开始事务</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T2</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">开始事务</td>
+</tr>
+<tr>
+<td style="text-align:center">T3</td>
+<td style="text-align:center">查询账户余额为1000元</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T4</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">查询账户余额为1000元</td>
+</tr>
+<tr>
+<td style="text-align:center">T5</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">汇入100元把余额改为1100元</td>
+</tr>
+<tr>
+<td style="text-align:center">T6</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">提交事务</td>
+</tr>
+<tr>
+<td style="text-align:center">T7</td>
+<td style="text-align:center">取出100元把余额改为900元</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T8</td>
+<td style="text-align:center">撤销事务</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T9</td>
+<td style="text-align:center">余额恢复为1000元（丢失更新）</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T10</td>
+<td style="text-align:center">结束</td>
+<td style="text-align:center">结束</td>
+</tr>
+</tbody>
+</table>
+<h5 id="第二类丢失更新"><a href="#第二类丢失更新" class="headerlink" title="第二类丢失更新"></a>第二类丢失更新</h5><p>示例</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">时间</th>
+<th style="text-align:center">取款事务A</th>
+<th style="text-align:center">转账事务B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">T1</td>
+<td style="text-align:center">开始事务</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T2</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">开始事务</td>
+</tr>
+<tr>
+<td style="text-align:center">T3</td>
+<td style="text-align:center">查询账户余额为1000元</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T4</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">查询账户余额为1000元</td>
+</tr>
+<tr>
+<td style="text-align:center">T5</td>
+<td style="text-align:center">取出100元把余额改为900元</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T6</td>
+<td style="text-align:center">提交事务</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T7</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">汇入100元</td>
+</tr>
+<tr>
+<td style="text-align:center">T8</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">提交事务</td>
+</tr>
+<tr>
+<td style="text-align:center">T9</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">把余额改为1100元（丢失更新）</td>
+</tr>
+<tr>
+<td style="text-align:center">T10</td>
+<td style="text-align:center">结束</td>
+<td style="text-align:center">结束</td>
+</tr>
+</tbody>
+</table>
+<h4 id="脏读（-Dirty-Read-）"><a href="#脏读（-Dirty-Read-）" class="headerlink" title="脏读（ Dirty Read ）"></a>脏读（ Dirty Read ）</h4><p><strong>表现</strong>：读取到其他事务中未提交的数据。</p>
+<p><strong>解决方法</strong>：如果在第一个事务提交前，任何其它事务不可读取其修改的值。</p>
+<p>示例</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">时间</th>
+<th style="text-align:center">取款事务A</th>
+<th style="text-align:center">转账事务B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">T1</td>
+<td style="text-align:center">开始事务</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T2</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">开始事务</td>
+</tr>
+<tr>
+<td style="text-align:center">T3</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">查询账户余额为1000元</td>
+</tr>
+<tr>
+<td style="text-align:center">T4</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">汇入100元把余额改为1100元</td>
+</tr>
+<tr>
+<td style="text-align:center">T5</td>
+<td style="text-align:center">查询账户余额为1100元（读取脏数据）</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T6</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">回滚</td>
+</tr>
+<tr>
+<td style="text-align:center">T7</td>
+<td style="text-align:center">取款1100元</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T8</td>
+<td style="text-align:center">提交事务失败</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T9</td>
+<td style="text-align:center">结束</td>
+<td style="text-align:center">结束</td>
+</tr>
+</tbody>
+</table>
+<h4 id="不可重复读（-Non-repeatable-Read-）"><a href="#不可重复读（-Non-repeatable-Read-）" class="headerlink" title="不可重复读（ Non-repeatable Read ）"></a>不可重复读（ Non-repeatable Read ）</h4><p><strong>表现</strong>：在一个事务中前后两次读取的结果不一致，导致了不可重复读。</p>
+<p><strong>解决方法</strong>：如果只有在修改事务完全提交之后才可以读取数据，则可以避免该问题</p>
+<p>示例</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">时间</th>
+<th style="text-align:center">取款事务A</th>
+<th style="text-align:center">转账事务B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">T1</td>
+<td style="text-align:center">开始事务</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T2</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">开始事务</td>
+</tr>
+<tr>
+<td style="text-align:center">T3</td>
+<td style="text-align:center">查询账户余额为1000元</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T4</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">汇入100元把余额改为1100元</td>
+</tr>
+<tr>
+<td style="text-align:center">T5</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">提交事务</td>
+</tr>
+<tr>
+<td style="text-align:center">T6</td>
+<td style="text-align:center">查询账户余额为1100元</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T7</td>
+<td style="text-align:center">提交事务</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T8</td>
+<td style="text-align:center">结束</td>
+<td style="text-align:center">结束</td>
+</tr>
+</tbody>
+</table>
+<h4 id="幻读（-Phantom-Read-）"><a href="#幻读（-Phantom-Read-）" class="headerlink" title="幻读（ Phantom Read ）"></a>幻读（ Phantom Read ）</h4><p><strong>表现</strong>：当某个事务在读取某个范围内的记录时，另外一个事务又在该范围内插入新记录或删除旧记录，当其它事务再次读取某个范围内的记录时，会产生幻行（Phantom Row）。</p>
+<p><strong>解决方法</strong>：如果在操作事务完成数据处理之前，任何其它事务都不可以添加新数据，则可以避免该问题。</p>
+<p>示例</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">时间</th>
+<th style="text-align:center">查询学生事务A</th>
+<th style="text-align:center">插入新学生事务B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">T1</td>
+<td style="text-align:center">开始事务</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T2</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">开始事务</td>
+</tr>
+<tr>
+<td style="text-align:center">T3</td>
+<td style="text-align:center">查询学生为10人</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T4</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">插入一个新学生</td>
+</tr>
+<tr>
+<td style="text-align:center">T5</td>
+<td style="text-align:center">查询学生为11人</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T6</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">提交事务</td>
+</tr>
+<tr>
+<td style="text-align:center">T7</td>
+<td style="text-align:center">提交事务</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">T8</td>
+<td style="text-align:center">结束</td>
+<td style="text-align:center">结束</td>
+</tr>
+</tbody>
+</table>
+<h4 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h4><h4 id="未提交读（-READ-UNCOMMITTED-）"><a href="#未提交读（-READ-UNCOMMITTED-）" class="headerlink" title="未提交读（ READ UNCOMMITTED ）"></a>未提交读（ READ UNCOMMITTED ）</h4><p>在该级别，事务中的修改，即使没有提交，对其它事务都是可见的。因此，在这个级别会导致<strong>脏读</strong>。</p>
+<p>这个级别会导致很多问题，从性能上来说，这个级别不会比其它的级别好太多，但却缺乏其它级别的好处，除非真的有非常的必要，在实际应用中很少使用。</p>
+<h4 id="提交读（-READ-COMMITTED-）"><a href="#提交读（-READ-COMMITTED-）" class="headerlink" title="提交读（ READ COMMITTED ）"></a>提交读（ READ COMMITTED ）</h4><p>一个事务开始时，只能“看见”已经提交的事务所做的修改。换句话说，一个事务从开始直到提交之前，所做的任何修改对其它事务都是不可见的。在这个级别会导致<strong>不可重复读</strong>。</p>
+<h4 id="可重复读（-REPEATABLE-READ-）"><a href="#可重复读（-REPEATABLE-READ-）" class="headerlink" title="可重复读（ REPEATABLE READ ）"></a>可重复读（ REPEATABLE READ ）</h4><p>该级别保证了在同一个事务中多次读到同样记录的结果是一致的。</p>
+<p>在这个级别无法解决<strong>幻读</strong>问题。</p>
+<h4 id="可串行化（-SERIALIZABLE-）"><a href="#可串行化（-SERIALIZABLE-）" class="headerlink" title="可串行化（ SERIALIZABLE ）"></a>可串行化（ SERIALIZABLE ）</h4><p>最高的隔离级别，强制事务串行执行。</p>
+<p>这个级别会在读取的每一行数据上都加锁，所以可能导致大量的超时和锁争用的问题，实际应用中也很少用到这个隔离级别。</p>
+<p>只有在非常需要确保数据的一致性，而且可以接受没有并发的情况下，才考虑该级别。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">隔离级别</th>
+<th style="text-align:center">脏读可能性</th>
+<th style="text-align:center">不可重复读可能性</th>
+<th style="text-align:center">幻读可能性</th>
+<th style="text-align:center">加锁读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">READ UNCOMMITTED</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">READ COMMITTED</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">REPEATABLE READ</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td style="text-align:center">SERIALIZABLE</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">YES</td>
+</tr>
+</tbody>
+</table>
+<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4><blockquote>
+<p>本教程到此结束，欢迎指正，互相交流。<br>本教程中的示例来源于马士兵大神的视频教程。<br>版权所有，未经允许，请勿随意转载。</p>
+</blockquote>
 
       
     </div>
@@ -532,7 +877,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#事务并发可能发生的问题"><span class="nav-number">1.</span> <span class="nav-text">事务并发可能发生的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#丢失更新（-Lost-Update-）"><span class="nav-number">2.</span> <span class="nav-text">丢失更新（ Lost Update ）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一类丢失更新"><span class="nav-number">2.1.</span> <span class="nav-text">第一类丢失更新</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二类丢失更新"><span class="nav-number">2.2.</span> <span class="nav-text">第二类丢失更新</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#脏读（-Dirty-Read-）"><span class="nav-number">3.</span> <span class="nav-text">脏读（ Dirty Read ）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不可重复读（-Non-repeatable-Read-）"><span class="nav-number">4.</span> <span class="nav-text">不可重复读（ Non-repeatable Read ）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#幻读（-Phantom-Read-）"><span class="nav-number">5.</span> <span class="nav-text">幻读（ Phantom Read ）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务隔离级别"><span class="nav-number">6.</span> <span class="nav-text">事务隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#未提交读（-READ-UNCOMMITTED-）"><span class="nav-number">7.</span> <span class="nav-text">未提交读（ READ UNCOMMITTED ）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提交读（-READ-COMMITTED-）"><span class="nav-number">8.</span> <span class="nav-text">提交读（ READ COMMITTED ）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可重复读（-REPEATABLE-READ-）"><span class="nav-number">9.</span> <span class="nav-text">可重复读（ REPEATABLE READ ）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可串行化（-SERIALIZABLE-）"><span class="nav-number">10.</span> <span class="nav-text">可串行化（ SERIALIZABLE ）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">11.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结语"><span class="nav-number">12.</span> <span class="nav-text">结语</span></a></li></ol></div>
             
           </div>
         </section>
