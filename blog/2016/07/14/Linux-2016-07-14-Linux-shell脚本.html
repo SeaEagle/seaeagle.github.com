@@ -88,7 +88,7 @@
 <meta property="og:url" content="http://blog.eaglefire.cn/blog/2016/07/14/Linux-2016-07-14-Linux-shell脚本.html">
 <meta property="og:site_name" content="SeaEagle's Blog">
 <meta property="og:description" content="作者：海鹰此教程讲述如何编写shell脚本版权所有，未经允许，请勿随意转载。">
-<meta property="og:updated_time" content="2016-07-14T07:42:08.979Z">
+<meta property="og:updated_time" content="2016-07-18T12:16:03.318Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux shell脚本">
 <meta name="twitter:description" content="作者：海鹰此教程讲述如何编写shell脚本版权所有，未经允许，请勿随意转载。">
@@ -338,6 +338,134 @@
 <p>作者：海鹰<br>此教程讲述如何编写shell脚本<br>版权所有，未经允许，请勿随意转载。</p>
 </blockquote>
 <a id="more"></a>
+<h2 id="1-使用shell"><a href="#1-使用shell" class="headerlink" title="1. 使用shell"></a>1. 使用shell</h2><p>Linux提供多个shell解释器给用户选择。</p>
+<h3 id="登录后进入用户指定的shell"><a href="#登录后进入用户指定的shell" class="headerlink" title="登录后进入用户指定的shell"></a>登录后进入用户指定的shell</h3><p>编辑/etc/passwd文件，找到需要修改shell的用户名，修改行末尾的shell程序。</p>
+<h3 id="使用chsh命令改变用户登录后进入的shell"><a href="#使用chsh命令改变用户登录后进入的shell" class="headerlink" title="使用chsh命令改变用户登录后进入的shell"></a>使用chsh命令改变用户登录后进入的shell</h3><h3 id="临时改变正在使用的shell"><a href="#临时改变正在使用的shell" class="headerlink" title="临时改变正在使用的shell"></a>临时改变正在使用的shell</h3><h2 id="2-bash程序设计"><a href="#2-bash程序设计" class="headerlink" title="2. bash程序设计"></a>2. bash程序设计</h2><ol>
+<li>shell程序就是把用户输入的shell命令按照控制结构组织到一个文本文件中，批量地交给shell去执行。</li>
+<li>shell程序是通过shell命令解释器执行的，不生成二进制的可执行代码。</li>
+<li>shell程序又称shell脚本程序，不同的shell解释器编制脚本程序的语法不完全相同。</li>
+</ol>
+<h3 id="bin-bash"><a href="#bin-bash" class="headerlink" title="#! /bin/bash"></a>#! /bin/bash</h3><ol>
+<li>程序的第1行指定了采取的shell脚本解释器。它由“#!”开始，其后是解释器的路径。</li>
+<li>如果采用其他解释器，可以用相应的路径替换/bin/bash。</li>
+</ol>
+<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>shell脚本中采用#作为注释符号。以#开始的注释只在本行起作用，多行注释需要在每行之前都加上#号。</p>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><ol>
+<li>将文件保存为.sh文件类型。</li>
+<li>需要赋予文件可执行权限：<u>chmod +x HelloWorld.sh</u>。</li>
+<li>echo $?，输出变量“?”的值，“$?”是检查前驱命令返回值的常用方法。</li>
+</ol>
+<h2 id="3-变量"><a href="#3-变量" class="headerlink" title="3. 变量"></a>3. 变量</h2><p>bash脚本语言是一种弱类型的脚本语言。所谓弱类型脚本语言，是指这种语言对类型的要求不严格，同一个变量随着使用场合的不同，可以存储不同类型的数据。</p>
+<h3 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h3><p><u>变量=值</u><br><em>注意：等号两侧不能有空格</em><br>比如：a=”hello”</p>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><ol>
+<li><p>引用一个变量可以在变量名前加一个$<br>比如：echo “$a world”</p>
+</li>
+<li><p>引用变量还可以采用：${变量名}<br>比如：echo “${a} world”</p>
+</li>
+<li><p>第二种引用方式还有以下几种常用的扩展用法<br>${variable: -value}：如果变量variable存在，则返回variable的值，否则返回value。<br>${variable: =value}：如果变量variable存在，则返回variable的值，否则，先将value赋给变量variable，然后返回值value。<br>${variable: +value}：如果变量variable存在，则返回值value，否则返回控制。<br>${variable:?value}：如果变量variable存在，则返回variable的值，否则将value送到标准错误输出显示并退出shell程序，这里的value通常为一个错误提示消息。<br>${variable: offset[: length]}：返回从变量variable的第（offset+1）个字符开始的、长度为length的子串，如果中括号内的部分省略，则返回其后的所有子串。</p>
+</li>
+<li><p>要指明表达式是一个运算式，可以使用expr命令和let命令。</p>
+</li>
+</ol>
+<h3 id="expr"><a href="#expr" class="headerlink" title="expr"></a>expr</h3><ol>
+<li><p>格式：expr arg，arg代表一个表达式，表达式是一个由运算符和操作数连接起来的字符串。</p>
+</li>
+<li><p>expr命令根据运算符的类型来判断操作数的类型，另外，操作数和运算符之间要用空白字符隔开，否则，expr计算错误。</p>
+</li>
+<li><p>在表达式中有通配符（如“ * ”）时，要采用转义字符“\”或者引号（单引号或双引号）。<br>比如：<br>expr 3 * 2 <em>错误</em><br>expr 3 \* 2 <em>正确</em><br>expr 3 ‘*‘ 2 <em>正确</em><br>expr 3 “*“ 2 <em>正确</em></p>
+</li>
+<li><p>当表达式比较复杂、含有不同优先级的运算符时，最好采用把复杂的表达式拆分成几个简单的表达式的方法。<br>比如：<br>s = `expr 2 + 3`<br>expr $s \* 4<br>或 expr `expr 2 + 3` \* 4<br><u>注意，这里使用了反向引号（`）</u></p>
+</li>
+</ol>
+<h3 id="let"><a href="#let" class="headerlink" title="let"></a>let</h3><ol>
+<li><p>格式：let arg1 [arg2…]，其中，中括号表示可以有多个参数，argN(N=1，2，3……)为表达式。每个表达式内的运算符和操作数之间不必用空格分开。</p>
+</li>
+<li><p>let命令可以一次对多个表达式进行计算。</p>
+</li>
+<li><p>当表达式中含有&lt;、&gt;、&amp;、|等特殊符号时，需要用转义字符“\”或者引号（单引号或双引号）放在特殊符号前面。</p>
+</li>
+<li><p>示例<br>let s = (2+3)*4</p>
+</li>
+</ol>
+<h2 id="4-条件判断"><a href="#4-条件判断" class="headerlink" title="4. 条件判断"></a>4. 条件判断</h2><ol>
+<li><p>在shell程序中，0表示真，非0表示假，这一点与C语言恰恰相反。</p>
+</li>
+<li><p>在bash中，对条件进行判断的命令是test和中括号[ ]，二者是等价的。<br>使用格式是：<br>test condition<br>或<br>[ condition ]</p>
+</li>
+<li><p>利用中括号[ ]进行判断时，左、右中括号和判断条件之间要用空格分隔开。</p>
+</li>
+<li><p>condition为需要判断的条件，可以是：<br>文件属性的测试，包括文件类型、文件访问权限等<br>字符串属性的测试，包括字符串长度、内容等<br>整数关系的测试，包括比较大小、相等判断等</p>
+</li>
+<li><p>逻辑运算<br>逻辑与-a：condition1 -a condition2<br>逻辑或-o：condition1 -o condition2<br>逻辑非!：!condition</p>
+</li>
+</ol>
+<h3 id="测试文件属性"><a href="#测试文件属性" class="headerlink" title="测试文件属性"></a>测试文件属性</h3><ol>
+<li><p>常用文件属性判断<br>-f fn：fn是否存在且为普通文件<br>-b fn：fn是否存在且为块设备<br>-e fn：fn是否存在<br>-d fn：fn是否存在且为目录<br>-r fn：fn是否存在且可读<br>-w fn：fn是否存在且可写<br>-x fn：fn是否存在且可执行<br>-O fn：fn是否存在且被当前用户拥有<br>-L fn：fn是否存在且为符号链接</p>
+</li>
+<li><p>示例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 文件是否存在且可写</span></span><br><span class="line">[root@localhost shell]<span class="comment"># test -w test.sh </span></span><br><span class="line">[root@localhost shell]<span class="comment"># echo $?</span></span><br><span class="line">0</span><br><span class="line"><span class="comment"># 文件是否为目录，且可写</span></span><br><span class="line">[root@localhost shell]<span class="comment"># test -d test.sh -a -w test.sh </span></span><br><span class="line">[root@localhost shell]<span class="comment"># echo $?</span></span><br><span class="line">1</span><br><span class="line"><span class="comment"># 文件是否可读，并且可写</span></span><br><span class="line">[root@localhost shell]<span class="comment"># test -r test.sh -a -w test.sh </span></span><br><span class="line">[root@localhost shell]<span class="comment"># echo $?</span></span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="测试字符串属性"><a href="#测试字符串属性" class="headerlink" title="测试字符串属性"></a>测试字符串属性</h3><ol>
+<li>常用字符串属性条件判断<br>string_1 = string_2：string_1和string_2是否相等<br>string_1 != string_2：string_1和string_2是否不相等<br>-z string：string的长度是否为0<br>-n string：string的长度是否不为0<br>string：等同于-n string</li>
+</ol>
+<h3 id="测试整数关系"><a href="#测试整数关系" class="headerlink" title="测试整数关系"></a>测试整数关系</h3><ol>
+<li>常用整数关系条件判断<br>num_1 -eq num_2：num_1是否等于num_2<br>num_1 -ne num_2：num_1是否不等于num_2<br>num_1 -gt num_2：num_1是否大于num_2<br>num_1 -lt num_2：num_1是否小于num_2<br>num_1 -ge num_2：num_1是否大于等于num_2<br>num_1 -le num_2：num_1是否小于等于num_2</li>
+</ol>
+<h2 id="5-控制结构"><a href="#5-控制结构" class="headerlink" title="5. 控制结构"></a>5. 控制结构</h2><h3 id="if"><a href="#if" class="headerlink" title="if"></a>if</h3><ol>
+<li><p>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">if 条件1</span><br><span class="line">then</span><br><span class="line">    命令</span><br><span class="line">[elif 条件2</span><br><span class="line">then</span><br><span class="line">    命令]</span><br><span class="line">[else</span><br><span class="line">    命令]</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当要求if的判断条件和then同在一行时，必须要在判断条件和then命令之间，增加一个分号作为分隔符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if 条件1 ;then</span><br><span class="line">    命令</span><br><span class="line">[elif 条件2 ;then</span><br><span class="line">    命令]</span><br><span class="line">[else</span><br><span class="line">    命令]</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="case"><a href="#case" class="headerlink" title="case"></a>case</h3><ol>
+<li><p>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">case 条件 in</span><br><span class="line">模式1)</span><br><span class="line">    命令1</span><br><span class="line">    ;;</span><br><span class="line">[模式2)</span><br><span class="line">    命令2</span><br><span class="line">    ;;</span><br><span class="line">...</span><br><span class="line">模式n)</span><br><span class="line">    命令n</span><br><span class="line">    ;;]</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>“条件”可以是变量、表达式、shell命令等。</p>
+</li>
+<li><p>“模式”为条件的值，并且一个“模式”可以匹配多种值，不同值之间用竖线（|）联结。模式还可以使用通配符，星号（*）匹配任意字符，问好（?）匹配任意单个字符，[…]匹配某个范围内的字符等。</p>
+</li>
+<li><p>示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">case $test in</span><br><span class="line">y|Y|yes|Yes)</span><br><span class="line">    echo &quot;OK&quot;</span><br><span class="line">    ;;</span><br><span class="line">n|N|no|No)</span><br><span class="line">    echo &quot;NO&quot;</span><br><span class="line">    ;;</span><br><span class="line">*)</span><br><span class="line">    echo &quot;Have a look&quot;</span><br><span class="line">    ;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="for"><a href="#for" class="headerlink" title="for"></a>for</h3><ol>
+<li><p>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for 变量 [in 列表]</span><br><span class="line">do</span><br><span class="line">    命令(通常用到循环变量)</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>“列表”为存储一系列值的列表，随着循环的进行，变量从列表的第一个值依次取到最后一个值。如果省略中括号部分，bash则认为是“in $@”，即执行该程序时，通过命令行传给程序的所有参数的列表。</p>
+</li>
+<li><p>示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for os in Linux Windows Unix</span><br><span class="line">do</span><br><span class="line">    echo &quot;Operation System is: $os&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="while和until"><a href="#while和until" class="headerlink" title="while和until"></a>while和until</h3><ol>
+<li>语法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">while/until 条件</span><br><span class="line">do</span><br><span class="line">    命令</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="6-函数"><a href="#6-函数" class="headerlink" title="6. 函数"></a>6. 函数</h2><ol>
+<li><p>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[function]函数名()</span><br><span class="line">&#123;</span><br><span class="line">	命令</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>function可以省略。</p>
+</li>
+<li><p>调用函数的格式：函数名 [ 参数1 参数2 …… 参数n ]</p>
+</li>
+<li><p>是否需要参数由函数的定义和功能决定，参数与参数之间用空格分隔。如果在函数内部需要使用传递给函数的参数，一般使用$0、$1、……、$n，以及$#、$*、$@这些特殊变量。$0为执行脚本的函数名，$1表示第一个参数，依次类推，$n为第n个参数；$#为传递给函数的参数个数；$*和$@为传递给函数的所有参数，两者的区别是，$*把所有参数作为一个整体，而$@把所有参数看做拥有多个参数的集合，可以单独访问每个参数。</p>
+</li>
+<li><p>当向一个完整的shell脚本程序传递参数时，shell程序同样可以通过这些特殊变量来访问传递的参数。这时，这些参数来自终端的命令行，把脚本文件名看做函数名，所有特殊变量的含义和向函数传递时的含义完全一样。</p>
+</li>
+<li><p>另外，在访问传递的参数时，采用shift命令也是一种常用的方式。shift命令用于将存储在位置变量（$1、$2、……、$n）中的变量左移一个位置。</p>
+</li>
+<li><p>shell程序中的函数也可以有返回值。使用return命令从函数返回值。</p>
+</li>
+</ol>
+<h2 id="7-示例"><a href="#7-示例" class="headerlink" title="7. 示例"></a>7. 示例</h2><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><blockquote>
+<p>本教程到此结束，欢迎指正，互相交流。<br>版权所有，未经允许，请勿随意转载。</p>
+</blockquote>
 
       
     </div>
@@ -536,7 +664,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-使用shell"><span class="nav-number">1.</span> <span class="nav-text">1. 使用shell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#登录后进入用户指定的shell"><span class="nav-number">1.1.</span> <span class="nav-text">登录后进入用户指定的shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用chsh命令改变用户登录后进入的shell"><span class="nav-number">1.2.</span> <span class="nav-text">使用chsh命令改变用户登录后进入的shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#临时改变正在使用的shell"><span class="nav-number">1.3.</span> <span class="nav-text">临时改变正在使用的shell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-bash程序设计"><span class="nav-number">2.</span> <span class="nav-text">2. bash程序设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bin-bash"><span class="nav-number">2.1.</span> <span class="nav-text">#! /bin/bash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注释"><span class="nav-number">2.2.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它"><span class="nav-number">2.3.</span> <span class="nav-text">其它</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-变量"><span class="nav-number">3.</span> <span class="nav-text">3. 变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#赋值"><span class="nav-number">3.1.</span> <span class="nav-text">赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用"><span class="nav-number">3.2.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#expr"><span class="nav-number">3.3.</span> <span class="nav-text">expr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#let"><span class="nav-number">3.4.</span> <span class="nav-text">let</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-条件判断"><span class="nav-number">4.</span> <span class="nav-text">4. 条件判断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试文件属性"><span class="nav-number">4.1.</span> <span class="nav-text">测试文件属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试字符串属性"><span class="nav-number">4.2.</span> <span class="nav-text">测试字符串属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试整数关系"><span class="nav-number">4.3.</span> <span class="nav-text">测试整数关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-控制结构"><span class="nav-number">5.</span> <span class="nav-text">5. 控制结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#if"><span class="nav-number">5.1.</span> <span class="nav-text">if</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#case"><span class="nav-number">5.2.</span> <span class="nav-text">case</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for"><span class="nav-number">5.3.</span> <span class="nav-text">for</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while和until"><span class="nav-number">5.4.</span> <span class="nav-text">while和until</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-函数"><span class="nav-number">6.</span> <span class="nav-text">6. 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-示例"><span class="nav-number">7.</span> <span class="nav-text">7. 示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">8.</span> <span class="nav-text">结语</span></a></li></ol></div>
             
           </div>
         </section>
