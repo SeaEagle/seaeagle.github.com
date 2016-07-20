@@ -82,16 +82,16 @@
 
 
 
-<meta name="description" content="作者：海鹰此教程讲述如何在CentOS部署定时任务版权所有，未经允许，请勿随意转载。">
+<meta name="description" content="作者：海鹰此教程讲述如何使用cron部署定时任务版权所有，未经允许，请勿随意转载。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux定时任务">
 <meta property="og:url" content="http://blog.eaglefire.cn/blog/2016/07/14/Linux-2016-07-14-Linux定时任务.html">
 <meta property="og:site_name" content="SeaEagle's Blog">
-<meta property="og:description" content="作者：海鹰此教程讲述如何在CentOS部署定时任务版权所有，未经允许，请勿随意转载。">
-<meta property="og:updated_time" content="2016-07-14T06:51:53.421Z">
+<meta property="og:description" content="作者：海鹰此教程讲述如何使用cron部署定时任务版权所有，未经允许，请勿随意转载。">
+<meta property="og:updated_time" content="2016-07-20T07:58:04.826Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux定时任务">
-<meta name="twitter:description" content="作者：海鹰此教程讲述如何在CentOS部署定时任务版权所有，未经允许，请勿随意转载。">
+<meta name="twitter:description" content="作者：海鹰此教程讲述如何使用cron部署定时任务版权所有，未经允许，请勿随意转载。">
 
 
 
@@ -335,9 +335,13 @@
 
       
         <blockquote>
-<p>作者：海鹰<br>此教程讲述如何在CentOS部署定时任务<br>版权所有，未经允许，请勿随意转载。</p>
+<p>作者：海鹰<br>此教程讲述如何使用cron部署定时任务<br>版权所有，未经允许，请勿随意转载。</p>
 </blockquote>
 <a id="more"></a>
+<h4 id="cron：定时任务"><a href="#cron：定时任务" class="headerlink" title="cron：定时任务"></a>cron：定时任务</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建crontab文件</span></span><br><span class="line">vi username.cron</span><br><span class="line"></span><br><span class="line"><span class="comment"># 写入需要运行的命令和定期执行的时间</span></span><br><span class="line">59 23 * * * tar czvf usr.tar.gz /home</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装contab文件</span></span><br><span class="line">crontab username.cron</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看是否安装成功</span></span><br><span class="line">/var/spool/cron是否创建了对应的文件</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行时间的格式</span></span><br><span class="line">&lt;minute&gt; &lt;hour&gt; &lt;day-of-month&gt; &lt;month-of-year&gt; &lt;day-of-week&gt; &lt;commands&gt;</span><br><span class="line"><span class="comment"># 分别表示分钟、小时、一个月的第几天、一年的第几个月、一周的星期几、要执行的命令</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 取值范围</span></span><br><span class="line">minute：00~59</span><br><span class="line">hour：00~23</span><br><span class="line">day-of-month：01~31</span><br><span class="line">month-of-year：01~12</span><br><span class="line">day-of-week：0~6</span><br><span class="line"></span><br><span class="line"><span class="comment"># 所有的时间字段都支持枚举，也就是说字段中可以写入多个时间值，每两个时间值中间用逗号分隔</span></span><br><span class="line"><span class="comment"># 每周一、三、五的下午三点进入维护状态，重新启动系统</span></span><br><span class="line">0 15 * * 1,3,5 shutdown -r +5</span><br></pre></td></tr></table></figure>
+<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4><blockquote>
+<p>本教程到此结束，欢迎指正，互相交流。<br>版权所有，未经允许，请勿随意转载。</p>
+</blockquote>
 
       
     </div>
@@ -536,7 +540,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#cron：定时任务"><span class="nav-number">1.</span> <span class="nav-text">cron：定时任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结语"><span class="nav-number">2.</span> <span class="nav-text">结语</span></a></li></ol></div>
             
           </div>
         </section>
