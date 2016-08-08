@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Java， JVM," />
 
 
 
@@ -82,15 +82,16 @@
 
 
 
-<meta name="description" content="大鹏一日同风起，扶摇直上九万里">
-<meta property="og:type" content="website">
-<meta property="og:title" content="SeaEagle's Blog">
-<meta property="og:url" content="http://blog.eaglefire.cn/tags/Hexo/index.html">
+<meta name="description" content="作者：海鹰本人才疏学浅，若有纰漏，虚心请教此教程为读书笔记，为JVM的入门了解篇">
+<meta property="og:type" content="article">
+<meta property="og:title" content="垃圾收集器与内存分配策略">
+<meta property="og:url" content="http://blog.eaglefire.cn/blog/2016/06/05/Java-JVM-2016-06-05-垃圾收集器与内存分配策略.html">
 <meta property="og:site_name" content="SeaEagle's Blog">
-<meta property="og:description" content="大鹏一日同风起，扶摇直上九万里">
+<meta property="og:description" content="作者：海鹰本人才疏学浅，若有纰漏，虚心请教此教程为读书笔记，为JVM的入门了解篇">
+<meta property="og:updated_time" content="2016-08-04T01:31:11.980Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SeaEagle's Blog">
-<meta name="twitter:description" content="大鹏一日同风起，扶摇直上九万里">
+<meta name="twitter:title" content="垃圾收集器与内存分配策略">
+<meta name="twitter:description" content="作者：海鹰本人才疏学浅，若有纰漏，虚心请教此教程为读书笔记，为JVM的入门了解篇">
 
 
 
@@ -108,7 +109,7 @@
   };
 </script>
 
-  <title> 标签: Hexo | SeaEagle's Blog </title>
+  <title> 垃圾收集器与内存分配策略 | SeaEagle's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -139,7 +140,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-right  ">
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,46 +238,162 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        Hexo
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                垃圾收集器与内存分配策略
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-05T14:00:00+08:00" content="2016-06-05">
+              2016-06-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java，-JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">Java， JVM</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2016/06/05/Java-JVM-2016-06-05-垃圾收集器与内存分配策略.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2016/06/05/Java-JVM-2016-06-05-垃圾收集器与内存分配策略.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/blog/2016/06/05/Java-JVM-2016-06-05-垃圾收集器与内存分配策略.html" class="leancloud_visitors" data-flag-title="垃圾收集器与内存分配策略">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <blockquote>
+<p>作者：海鹰<br>本人才疏学浅，若有纰漏，虚心请教<br>此教程为读书笔记，为JVM的入门了解篇</p>
+</blockquote>
+<a id="more"></a>
 
-      <h1 class="post-title">
+      
+    </div>
+    
+    <div>
+      
         
-            <a class="post-title-link" href="/blog/2016/04/22/Hexo-2016-04-22-Hexo搭建个人Blog（问题记录-hexo-deploy）.html" itemprop="url">
-              
-                <span itemprop="name">Hexo搭建个人Blog（问题记录-hexo deploy）</span>
-              
-            </a>
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-22T15:39:00+08:00"
-              content="2016-04-22" >
-          04-22
-        </time>
-      </div>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java，-JVM/" rel="tag">#Java， JVM</a>
+          
+        </div>
+      
 
-    </header>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2016/06/04/Java-JVM-2016-06-04-Java内存区域与内存溢出异常.html" rel="next" title="Java内存区域与内存溢出异常">
+                <i class="fa fa-chevron-left"></i> Java内存区域与内存溢出异常
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2016/06/16/Nginx-2016-06-16-Nginx日志格式配置.html" rel="prev" title="Nginx日志格式配置">
+                Nginx日志格式配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -284,6 +401,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2016/06/05/Java-JVM-2016-06-05-垃圾收集器与内存分配策略.html"
+           data-title="垃圾收集器与内存分配策略" data-url="http://blog.eaglefire.cn/blog/2016/06/05/Java-JVM-2016-06-05-垃圾收集器与内存分配策略.html">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -303,8 +428,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -395,6 +529,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -502,6 +647,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
